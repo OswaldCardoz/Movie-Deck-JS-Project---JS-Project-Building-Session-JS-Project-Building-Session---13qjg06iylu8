@@ -122,6 +122,7 @@ function updateFavoriteIcons(){
         }
     });
 }
+
 //all and favorite tabs
 const allTabButton = document.getElementById('all-tab');
 const favoritesTabButton = document.getElementById('favorites-tab');
@@ -138,6 +139,7 @@ favoritesTabButton.addEventListener('click', () => {
     favoritesTabButton.classList.add('active-tab');
     allTabButton.classList.remove('active-tab');
 });
+
 // pagination
 const prevButton = document.getElementById('prev-button');
 const pageButton = document.getElementById('page-number-button');
