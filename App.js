@@ -161,7 +161,7 @@ nextButton.addEventListener('click', () => {
 
 // Initialize the page number
 pageButton.textContent = `Current Page: ${currentPage}`;
-
+ 
 
 
 
