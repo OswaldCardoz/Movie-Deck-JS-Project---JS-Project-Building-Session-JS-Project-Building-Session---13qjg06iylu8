@@ -72,3 +72,94 @@ function sortByRating(){
 sortByRatingButton.addEventListener("click",sortByRating);
 sortByDateButton.addEventListener("click",sortByDate);
 fetchMovies(currentPage);
+
+// to search
+const searchInput=document.getElementById("search-input");
+const searchButton=document.getElementById("search-button");
+searchButton.addEventListener('click',()=>{
+    const query =searchInput.value.trim();
+    if(query !== ''){
+        const searchResults=movies.filter(movie=> movie.title.toLowerCase().includes(query.toLowerCase()));
+        renderMovies(searchResults);
+    }
+});
+
+//favorite
+const favorites=[];
+function toggleFavorite(movie, icon){
+    const movieId=movie.id;
+    const isFavorite=favorites.includes(movieId);
+
+    if(isFavorite){
+        const fav=favorites.indexOf(movieId);
+        if(fav>-1){
+            favorites.splice(fav,1)
+        }
+        icon.classList.remove('fa-solid', 'fa-heart');
+        icon.classList.add('fa-regular','fa-heart');
+    }else{
+        favorites.push(movieId);
+        icon.classList.add('fa-regular','fa-heart');
+        icon.classList.remove('fa-solid', 'fa-heart');
+    }
+    localStorage.setItem('favorites',JSON.stringify(favorites));
+}
+
+function loadFavorites(){
+    const favoritesData=localStorage.getItem('favorites');
+    if(favoritesData){
+        favorites.push(...JSON.parse(favoritesData));
+    }
+}
+
+function updateFavoriteIcons(){
+    const favoriteIcons=document.querySelectorAll('.fa-heart');
+    favoriteIcons.forEach(icon => {
+        const movieId =parseInt(icon.dataset.movieId);
+        if(favorites.includes(movieId)){
+            icon.classList.add('fa-regular','fa-heart');
+            icon.classList.remove('fa-solid', 'fa-heart');
+        }
+    });
+}
+//all and favorite tabs
+const allTabButton = document.getElementById('all-tab');
+const favoritesTabButton = document.getElementById('favorites-tab');
+
+allTabButton.addEventListener('click', () => {
+    renderMovies(movies);
+    allTabButton.classList.add('active-tab');
+    favoritesTabButton.classList.remove('active-tab');
+});
+
+favoritesTabButton.addEventListener('click', () => {
+    const favoriteMovies = movies.filter(movie => favorites.includes(movie.id));
+    renderMovies(favoriteMovies);
+    favoritesTabButton.classList.add('active-tab');
+    allTabButton.classList.remove('active-tab');
+});
+// pagination
+const prevButton = document.getElementById('prev-button');
+const pageButton = document.getElementById('page-number-button');
+const nextButton = document.getElementById('next-button');
+
+prevButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        loadPage(currentPage);
+    }
+});
+
+nextButton.addEventListener('click', () => {
+    if (currentPage < 3) {
+        currentPage++;
+        loadPage(currentPage);
+    }
+});
+
+// Initialize the page number
+pageButton.textContent = `Current Page: ${currentPage}`;
+
+
+
+
